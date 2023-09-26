@@ -1,0 +1,140 @@
+import time
+class Cliente:
+    def __init__(self, nome, idade, banco):
+        self.nome = nome
+        self.idade = idade
+        self.banco = banco
+        self.conta_bancaria = None
+        self.cartao_credito = None
+
+    def abrir_conta(self, numero_conta, saldo_inicial):
+        self.conta_bancaria = ContaBancaria(numero_conta, saldo_inicial, self)
+
+    def criar_cartao_credito(self, limite_credito):
+        if not self.cartao_credito:
+            self.cartao_credito = CartaoCredito(limite_credito)
+            time.sleep(1)
+            return f"Cartão de crédito criado com limite de R${limite_credito}."
+        else:
+            return "Você já possui um cartão de crédito."
+
+    def sacar(self, valor):
+        if self.conta_bancaria:
+            time.sleep(1)
+            return self.conta_bancaria.sacar(valor)
+        else:
+            return "Você não tem uma conta bancária."
+
+    def depositar(self, valor):
+        if self.conta_bancaria:
+            time.sleep(1)
+            return self.conta_bancaria.depositar(valor)
+        else:
+            return "Você não tem uma conta bancária."
+
+    def extrato(self):
+        if self.conta_bancaria:
+            time.sleep(1)
+            return self.conta_bancaria.extrato()
+        else:
+            return "Você não tem uma conta bancária."
+
+    def verificar_cartao_credito(self):
+        if self.cartao_credito:
+            time.sleep(1)
+            return f"Você tem um cartão de crédito com saldo de R${self.cartao_credito.saldo}."
+        else:
+            return "Você não tem um cartão de crédito."
+
+
+class ContaBancaria:
+    def __init__(self, numero_conta, saldo_inicial, cliente):
+        self.numero_conta = numero_conta
+        self.saldo = saldo_inicial
+        self.cliente = cliente
+
+    def sacar(self, valor):
+        if valor > 0 and self.saldo >= valor:
+            self.saldo -= valor
+            time.sleep(1)
+            return f"Saque de R${valor} realizado com sucesso. Saldo restante: R${self.saldo}"
+        else:
+            return "Saldo insuficiente para realizar o saque."
+
+    def depositar(self, valor):
+        if valor > 0:
+            self.saldo += valor
+            time.sleep(1)
+            return f"Depósito de R${valor} realizado com sucesso. Saldo atual: R${self.saldo}"
+        else:
+            return "Valor de depósito inválido."
+
+    def extrato(self):
+        time.sleep(1)
+        return f"Saldo da conta {self.numero_conta} do banco {self.cliente.banco}: R${self.saldo}"
+
+
+class CartaoCredito:
+    def __init__(self, limite_credito):
+        self.limite_credito = limite_credito
+        self.saldo = limite_credito
+
+    def realizar_compra(self, valor):
+        if valor > 0 and self.saldo >= valor:
+            self.saldo -= valor
+            time.sleep(1)
+            return f"Compra de R${valor} realizada com sucesso. Saldo restante: R${self.saldo}"
+        else:
+            return "Limite de crédito insuficiente para realizar a compra."
+
+
+def main():
+    nome_banco = "Vassouras Bank"
+    cliente = Cliente("Jonathan", 26, nome_banco)
+
+    cliente.abrir_conta("11234-5", 1000.0)
+
+    while True:
+        print("\nOpções:")
+        print("1. Visualizar Extrato")
+        time.sleep(0.5)
+        print("2. Sacar")
+        time.sleep(0.55)
+        print("3. Depositar")
+        time.sleep(0.6)
+        print("4. Criar Cartão de Crédito")
+        time.sleep(0.65)
+        print("5. Verificar Cartão de Crédito")
+        time.sleep(0.7)
+        print("6. Sair")
+
+        opcao = input("Escolha uma opção: ")
+
+        if opcao == "1":
+            time.sleep(1)
+            print(cliente.extrato())
+        elif opcao == "2":
+            valor = float(input("Informe o valor a ser sacado: "))
+            time.sleep(1)
+            print(cliente.sacar(valor))
+        elif opcao == "3":
+            valor = float(input("Informe o valor a ser depositado: "))
+            time.sleep(1)
+            print(cliente.depositar(valor))
+        elif opcao == "4":
+            limite_credito = float(input("Informe o limite de crédito do cartão: "))
+            time.sleep(1)
+            print(cliente.criar_cartao_credito(limite_credito))
+        elif opcao == "5":
+            time.sleep(1)
+            print(cliente.verificar_cartao_credito())
+        elif opcao == "6":
+            time.sleep(1)
+            print("Vassouras Bank Agradece a Preferência!")
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
+
+
+if __name__ == "__main__":
+    main()
